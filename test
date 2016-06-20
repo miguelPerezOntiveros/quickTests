@@ -1,0 +1,62 @@
+#!/usr/local/bin/fish
+#Author: Miguel Pérez Ontiveros
+
+# Check if the type of test was provided
+if [ (count $argv) -lt 1 ]
+	echo "you must supply the type of test you want and optionally a name for your test's folder."
+	exit
+end
+
+# Set variables according to the type of test
+switch $argv[1]
+	case html
+		set folder Tests_HTML
+		set file index.html
+	case c
+		set folder Tests_C
+		set file main.c
+		set runner run_C
+	case cpp
+		set folder Tests_CPP
+		set file main.cpp
+		set runner run_Cpp
+	case java
+		set folder Tests_Java
+		set file Main.java
+		set runner run_Java
+end
+
+# Create the corresponding folder given the test type
+if not [ -d $folder ]
+	mkdir $folder
+end
+
+# Create subfolder
+if [ (count $argv) -gt 1 ]
+	set subfolder $argv[2]
+else
+	set subfolder 'test'
+end
+
+if [ -d $folder"/"$subfolder ]
+    set i 1
+    while [ -d $folder"/"$subfolder$i ]
+        set i (math "$i+1")
+    end
+    set subfolder $subfolder$i
+end
+mkdir $folder"/"$subfolder
+
+# Magic
+switch $argv[1]
+	case html
+		cp Tests_src/$file $folder/$subfolder/$file
+		sublime $folder/$subfolder/$file
+		live-server $folder/$subfolder/
+	case c cpp java
+		cp Tests_src/$file $folder/$subfolder/
+		cp Tests_src/$runner $folder/$subfolder
+		chmod +x $folder/$subfolder/$runner
+		cd $folder/$subfolder
+		sublime $file
+end
