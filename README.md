@@ -1,11 +1,12 @@
 # quickTests
-Creates small programming environments useful for quick tests.
+Creates small programming environments, useful for quick tests.
 
 ## About
 * Make a 'Hello World!' program in Java, C, C++ or HTML with a single command.
 * Program templates can be modified in the Tests_src folder.
 * Optional second parameter sets your folder name.
-* Save time, profit!
+* Ideal for testing small functionalities/behaviours fast.
+* Set up a project in seconds. Save time, profit!
 
 ## Install it
 - use fish
