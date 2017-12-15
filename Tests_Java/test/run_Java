@@ -1,0 +1,2 @@
+#!/usr/local/bin/fish
+javac Main.java -cp .:com.google.ical-20110304.jar; and java Main -cp .:com.google.ical-20110304.jar;
