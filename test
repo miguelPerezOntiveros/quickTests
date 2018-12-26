@@ -7,37 +7,19 @@ if [ (count $argv) -lt 1 ]
 	exit
 end
 
-# Set variables according to the type of test
-switch $argv[1]
-	case html
-		set folder Tests_HTML
-		set file index.html
-	case c
-		set folder Tests_C
-		set file main.c
-		set runner run_C
-	case cpp
-		set folder Tests_CPP
-		set file main.cpp
-		set runner run_Cpp
-	case java
-		set folder Tests_Java
-		set file Main.java
-		set runner run_Java
+if not [ -d "src/"$argv[1] ]
+	echo "test not supported"
+	exit
 end
 
-# Create the corresponding folder given the test type
-if not [ -d $folder ]
-	mkdir $folder
-end
+set folder "Tests_"$argv[1]
 
-# Create subfolder
+# Create folder
 if [ (count $argv) -gt 1 ]
 	set subfolder $argv[2]
 else
 	set subfolder 'test'
 end
-
 if [ -d $folder"/"$subfolder ]
     set i 1
     while [ -d $folder"/"$subfolder$i ]
@@ -45,18 +27,21 @@ if [ -d $folder"/"$subfolder ]
     end
     set subfolder $subfolder$i
 end
-mkdir $folder"/"$subfolder
+mkdir -p $folder"/"$subfolder
 
-# Magic
-switch $argv[1]
-	case html
-		cp Tests_src/$file $folder/$subfolder/$file
-		sublime $folder/$subfolder/$file
-		live-server $folder/$subfolder/
-	case c cpp java
-		cp Tests_src/$file $folder/$subfolder/
-		cp Tests_src/$runner $folder/$subfolder
-		chmod +x $folder/$subfolder/$runner
-		cd $folder/$subfolder
-		sublime $file
+# copy source files (1.-start.sh 2.-run.sh 3.-language's main file)
+cp src"/"$argv[1]/* $folder"/"$subfolder
+
+# cd to test's folder
+cd $folder"/"$subfolder
+
+#chmod the sh's
+chmod +x *.sh
+
+# open folder on sublime
+sublime .
+
+# start
+if [ -e start.sh ]
+	./start.sh
 end

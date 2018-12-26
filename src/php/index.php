@@ -14,7 +14,9 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
-				Hello world!
+				<?php 
+					echo "Hello World!";
+				?>
 			</div>
 		</div>
 	</div>
